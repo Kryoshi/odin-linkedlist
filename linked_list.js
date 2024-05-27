@@ -1,7 +1,7 @@
 class LinkedList {
-  head = null;
-  tail = null;
-  size = 0;
+  #head = null;
+  #tail = null;
+  #length = 0;
 
   constructor(...values) {
     for (let value of values) {
@@ -9,39 +9,49 @@ class LinkedList {
     }
   }
 
+  get head() {
+    return this.#head;
+  }
+  get tail() {
+    return this.#tail;
+  }
+  get length() {
+    return this.#length;
+  }
+
   append(value) {
     const node = new Node(value);
-    if (this.head !== null) {
-      this.tail.next = node;
-      node.previous = this.tail;
-      this.tail = node;
+    if (this.#head !== null) {
+      this.#tail.next = node;
+      node.previous = this.#tail;
+      this.#tail = node;
     } else {
-      this.head = node;
-      this.tail = node;
+      this.#head = node;
+      this.#tail = node;
     }
-    this.size++;
+    this.#length++;
   }
 
   prepend(value) {
     const node = new Node(value);
-    if (this.head !== null) {
-      node.next = this.head;
-      this.head.previous = node;
-      this.head = node;
+    if (this.#head !== null) {
+      node.next = this.#head;
+      this.#head.previous = node;
+      this.#head = node;
     } else {
-      this.head = node;
-      this.tail = node;
+      this.#head = node;
+      this.#tail = node;
     }
-    this.size++;
+    this.#length++;
   }
 
   insertAt(index, value) {
     if (typeof index === 'number') {
-      if (index === this.size) {
+      if (index === this.#length) {
         this.append(value);
       } else if (index === 0) {
         this.prepend(value);
-      } else if (index > 0 && index < this.size) {
+      } else if (index > 0 && index < this.#length) {
         const node = this.at(index);
         if (node !== null) {
           const newNode = new Node(value);
@@ -50,32 +60,32 @@ class LinkedList {
           newNode.next = node;
           node.previous = newNode;
         }
-        this.size++;
+        this.#length++;
       }
     }
   }
 
   removeAt(index) {
     if (typeof index === 'number') {
-      if (index === this.size - 1) {
+      if (index === this.#length - 1) {
         this.pop();
       } else if (index === 0) {
         this.popFirst();
-      } else if (index >= 0 && index < this.size) {
+      } else if (index >= 0 && index < this.#length) {
         let node = this.at(index);
         if (node !== null) {
           node.previous.next = node.next;
           node.next.previous = node.previous;
           node = null;
         }
-        this.size--;
+        this.#length--;
       }
     }
   }
 
   at(index) {
     let i = 0;
-    let node = this.head;
+    let node = this.#head;
     while (node !== null && i < index) {
       node = node.next;
       ++i;
@@ -84,33 +94,33 @@ class LinkedList {
   }
 
   pop() {
-    if (this.size > 0) {
-      if (this.size > 1) {
-        this.tail = this.tail.previous;
-        this.tail.next = null;
+    if (this.#length > 0) {
+      if (this.#length > 1) {
+        this.#tail = this.#tail.previous;
+        this.#tail.next = null;
       } else {
-        this.tail = null;
-        this.head = null;
+        this.#tail = null;
+        this.#head = null;
       }
-      this.size--;
+      this.#length--;
     }
   }
 
   popFirst() {
-    if (this.size > 1) {
-      if (this.size > 1) {
-        this.head = this.head.next;
-        this.head.previous = null;
+    if (this.#length > 1) {
+      if (this.#length > 1) {
+        this.#head = this.#head.next;
+        this.#head.previous = null;
       } else {
-        this.tail = null;
-        this.head = null;
+        this.#tail = null;
+        this.#head = null;
       }
-      this.size--;
+      this.#length--;
     }
   }
 
   contains(value) {
-    let node = this.head;
+    let node = this.#head;
     while (node !== null) {
       if (node.value === value) {
         return true;
@@ -122,7 +132,7 @@ class LinkedList {
 
   find(value) {
     let index = 0;
-    let node = this.head;
+    let node = this.#head;
     while (node !== null) {
       if (node.value === value) {
         return index;
@@ -135,7 +145,7 @@ class LinkedList {
 
   toString() {
     const linkString = ' -> ';
-    let node = this.head;
+    let node = this.#head;
     let nodeString = '';
     while (node !== null) {
       nodeString += node.value + linkString;
